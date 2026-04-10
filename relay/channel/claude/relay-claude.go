@@ -859,6 +859,7 @@ func ClaudeStreamHandler(c *gin.Context, resp *http.Response, info *relaycommon.
 	}
 
 	HandleStreamFinalResponse(c, info, claudeInfo)
+
 	return claudeInfo.Usage, nil
 }
 
@@ -924,6 +925,7 @@ func ClaudeHandler(c *gin.Context, resp *http.Response, info *relaycommon.RelayI
 		println("responseBody: ", string(responseBody))
 	}
 	logger.LogRelayResponse(c, responseBody)
+	info.ResponseBody = string(responseBody)
 
 	handleErr := HandleClaudeResponseData(c, info, claudeInfo, resp, responseBody)
 	if handleErr != nil {

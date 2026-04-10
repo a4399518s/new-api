@@ -135,6 +135,7 @@ func ClaudeHelper(c *gin.Context, info *relaycommon.RelayInfo) (newAPIError *typ
 		}
 		if debugBytes, bErr := storage.Bytes(); bErr == nil {
 			logger.LogRelayRequest(c, debugBytes)
+			info.RequestBody = string(debugBytes)
 		}
 		requestBody = common.ReaderOnly(storage)
 	} else {
@@ -166,6 +167,7 @@ func ClaudeHelper(c *gin.Context, info *relaycommon.RelayInfo) (newAPIError *typ
 			println("requestBody: ", string(jsonData))
 		}
 		logger.LogRelayRequest(c, jsonData)
+		info.RequestBody = string(jsonData)
 		requestBody = bytes.NewBuffer(jsonData)
 	}
 

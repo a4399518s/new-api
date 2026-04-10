@@ -79,6 +79,7 @@ func ResponsesHelper(c *gin.Context, info *relaycommon.RelayInfo) (newAPIError *
 		}
 		if debugBytes, bErr := storage.Bytes(); bErr == nil {
 			logger.LogRelayRequest(c, debugBytes)
+			info.RequestBody = string(debugBytes)
 		}
 		requestBody = common.ReaderOnly(storage)
 	} else {
@@ -110,6 +111,7 @@ func ResponsesHelper(c *gin.Context, info *relaycommon.RelayInfo) (newAPIError *
 			println("requestBody: ", string(jsonData))
 		}
 		logger.LogRelayRequest(c, jsonData)
+		info.RequestBody = string(jsonData)
 		requestBody = bytes.NewBuffer(jsonData)
 	}
 

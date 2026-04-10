@@ -264,6 +264,7 @@ func GeminiEmbeddingHandler(c *gin.Context, info *relaycommon.RelayInfo) (newAPI
 	}
 	logger.LogDebug(c, "Gemini embedding request body: "+string(jsonData))
 	logger.LogRelayRequest(c, jsonData)
+	info.RequestBody = string(jsonData)
 	requestBody = bytes.NewReader(jsonData)
 
 	resp, err := adaptor.DoRequest(c, info, requestBody)

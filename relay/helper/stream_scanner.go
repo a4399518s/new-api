@@ -43,10 +43,17 @@ func StreamScannerHandler(c *gin.Context, resp *http.Response, info *relaycommon
 	// 无条件新建 StreamStatus
 	info.StreamStatus = relaycommon.NewStreamStatus()
 
+	// 用于收集所有流式数据
+	var streamBuilder strings.Builder
+
 	// 确保响应体总是被关闭
 	defer func() {
 		if resp.Body != nil {
 			resp.Body.Close()
+		}
+		// 保存所有流式数据到 info.ResponseBody
+		if streamBuilder.Len() > 0 {
+			info.ResponseBody = streamBuilder.String()
 		}
 	}()
 
@@ -257,6 +264,10 @@ func StreamScannerHandler(c *gin.Context, resp *http.Response, info *relaycommon
 				info.ReceivedResponseCount++
 
 				logger.LogRelayStreamResponse(c, data)
+
+				// 收集流式数据
+				streamBuilder.WriteString(data)
+				streamBuilder.WriteString("\n")
 
 				select {
 				case dataChan <- data:

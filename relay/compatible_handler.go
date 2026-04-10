@@ -107,6 +107,7 @@ func TextHelper(c *gin.Context, info *relaycommon.RelayInfo) (newAPIError *types
 		}
 		if debugBytes, bErr := storage.Bytes(); bErr == nil {
 			logger.LogRelayRequest(c, debugBytes)
+			info.RequestBody = string(debugBytes)
 		}
 		requestBody = common.ReaderOnly(storage)
 	} else {
@@ -180,6 +181,7 @@ func TextHelper(c *gin.Context, info *relaycommon.RelayInfo) (newAPIError *types
 		logger.LogDebug(c, fmt.Sprintf("text request body: %s", string(jsonData)))
 		logger.LogRelayRequest(c, jsonData)
 
+		info.RequestBody = string(jsonData)
 		requestBody = bytes.NewBuffer(jsonData)
 	}
 

@@ -72,6 +72,7 @@ func RerankHelper(c *gin.Context, info *relaycommon.RelayInfo) (newAPIError *typ
 			println(fmt.Sprintf("Rerank request body: %s", string(jsonData)))
 		}
 		logger.LogRelayRequest(c, jsonData)
+		info.RequestBody = string(jsonData)
 		requestBody = bytes.NewBuffer(jsonData)
 	}
 
