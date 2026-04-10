@@ -923,6 +923,8 @@ func ClaudeHandler(c *gin.Context, resp *http.Response, info *relaycommon.RelayI
 	if common.DebugEnabled {
 		println("responseBody: ", string(responseBody))
 	}
+	logger.LogRelayResponse(c, responseBody)
+
 	handleErr := HandleClaudeResponseData(c, info, claudeInfo, resp, responseBody)
 	if handleErr != nil {
 		return nil, handleErr

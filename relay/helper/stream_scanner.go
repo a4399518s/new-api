@@ -256,6 +256,8 @@ func StreamScannerHandler(c *gin.Context, resp *http.Response, info *relaycommon
 				info.SetFirstResponseTime()
 				info.ReceivedResponseCount++
 
+				logger.LogRelayStreamResponse(c, data)
+
 				select {
 				case dataChan <- data:
 				case <-ctx.Done():

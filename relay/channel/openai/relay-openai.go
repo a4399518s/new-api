@@ -203,6 +203,8 @@ func OpenaiHandler(c *gin.Context, info *relaycommon.RelayInfo, resp *http.Respo
 	if common.DebugEnabled {
 		println("upstream response body:", string(responseBody))
 	}
+	logger.LogRelayResponse(c, responseBody)
+
 	// Unmarshal to simpleResponse
 	if info.ChannelType == constant.ChannelTypeOpenRouter && info.ChannelOtherSettings.IsOpenRouterEnterprise() {
 		// 尝试解析为 openrouter enterprise
