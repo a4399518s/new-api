@@ -187,3 +187,71 @@ func LogJson(ctx context.Context, msg string, obj any) {
 	}
 	LogDebug(ctx, "%s | %s", msg, jsonStr)
 }
+
+func LogRelayRequest(ctx context.Context, requestBody []byte) {
+	settings := operation_setting.GetGeneralSetting()
+	if !settings.RelayLogEnabled {
+		return
+	}
+	if !settings.RelayLogRequestBody {
+		logHelper(ctx, loggerINFO, "[Relay Request]")
+		return
+	}
+
+	maxLen := settings.RelayLogMaxLength
+	if maxLen <= 0 {
+		maxLen = 4096
+	}
+
+	body := string(requestBody)
+	if len(body) > maxLen {
+		body = body[:maxLen] + "...[truncated]"
+	}
+
+	logHelper(ctx, loggerINFO, fmt.Sprintf("[Relay Request] %s", body))
+}
+
+func LogRelayResponse(ctx context.Context, responseBody []byte) {
+	settings := operation_setting.GetGeneralSetting()
+	if !settings.RelayLogEnabled {
+		return
+	}
+	if !settings.RelayLogResponseBody {
+		logHelper(ctx, loggerINFO, "[Relay Response]")
+		return
+	}
+
+	maxLen := settings.RelayLogMaxLength
+	if maxLen <= 0 {
+		maxLen = 4096
+	}
+
+	body := string(responseBody)
+	if len(body) > maxLen {
+		body = body[:maxLen] + "...[truncated]"
+	}
+
+	logHelper(ctx, loggerINFO, fmt.Sprintf("[Relay Response] %s", body))
+}
+
+func LogRelayStreamResponse(ctx context.Context, streamData string) {
+	settings := operation_setting.GetGeneralSetting()
+	if !settings.RelayLogEnabled {
+		return
+	}
+	if !settings.RelayLogResponseBody {
+		return
+	}
+
+	maxLen := settings.RelayLogMaxLength
+	if maxLen <= 0 {
+		maxLen = 4096
+	}
+
+	data := streamData
+	if len(data) > maxLen {
+		data = data[:maxLen] + "...[truncated]"
+	}
+
+	logHelper(ctx, loggerINFO, fmt.Sprintf("[Relay Stream] %s", data))
+}

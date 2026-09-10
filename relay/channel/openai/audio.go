@@ -63,6 +63,7 @@ func OpenaiTTSHandler(c *gin.Context, resp *http.Response, info *relaycommon.Rel
 			c.Writer.WriteHeaderNow()
 			return usage
 		}
+		info.ResponseBody = string(bodyBytes)
 
 		// 写入响应到客户端
 		c.Writer.WriteHeaderNow()
@@ -122,6 +123,8 @@ func OpenaiSTTHandler(c *gin.Context, resp *http.Response, info *relaycommon.Rel
 	if err != nil {
 		return types.NewOpenAIError(err, types.ErrorCodeReadResponseBodyFailed, http.StatusInternalServerError), nil
 	}
+	info.ResponseBody = string(responseBody)
+
 	// 写入新的 response body
 	service.IOCopyBytesGracefully(c, resp, responseBody)
 

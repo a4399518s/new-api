@@ -83,6 +83,9 @@ func StreamScannerHandler(c *gin.Context, resp *http.Response, info *relaycommon
 	// 无条件新建 StreamStatus
 	info.StreamStatus = relaycommon.NewStreamStatus()
 
+	// 用于收集所有流式数据
+	var streamBuilder strings.Builder
+
 	ctx, cancel := context.WithCancel(context.Background())
 
 	streamingTimeout := time.Duration(constant.StreamingTimeout) * time.Second
@@ -127,6 +130,11 @@ func StreamScannerHandler(c *gin.Context, resp *http.Response, info *relaycommon
 			stop()
 			if resp.Body != nil {
 				_ = resp.Body.Close()
+			}
+
+			// 保存所有流式数据到 info.ResponseBody
+			if streamBuilder.Len() > 0 {
+				info.ResponseBody = streamBuilder.String()
 			}
 
 			ticker.Stop()
@@ -265,6 +273,12 @@ func StreamScannerHandler(c *gin.Context, resp *http.Response, info *relaycommon
 			if !strings.HasPrefix(data, "[DONE]") {
 				info.SetFirstResponseTime()
 				info.ReceivedResponseCount++
+
+				logger.LogRelayStreamResponse(c, data)
+
+				// 收集流式数据
+				streamBuilder.WriteString(data)
+				streamBuilder.WriteString("\n")
 
 				select {
 				case dataChan <- data:

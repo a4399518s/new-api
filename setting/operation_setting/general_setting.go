@@ -20,6 +20,14 @@ type GeneralSetting struct {
 	CustomCurrencySymbol string `json:"custom_currency_symbol"`
 	// 自定义货币与美元汇率（1 USD = X Custom）
 	CustomCurrencyExchangeRate float64 `json:"custom_currency_exchange_rate"`
+	// Relay 日志配置
+	RelayLogEnabled bool `json:"relay_log_enabled"`
+	// Relay 日志是否记录请求体（包含敏感信息）
+	RelayLogRequestBody bool `json:"relay_log_request_body"`
+	// Relay 日志是否记录响应体
+	RelayLogResponseBody bool `json:"relay_log_response_body"`
+	// Relay 日志最大记录长度（字符）
+	RelayLogMaxLength int `json:"relay_log_max_length"`
 }
 
 // 默认配置
@@ -30,6 +38,10 @@ var generalSetting = GeneralSetting{
 	QuotaDisplayType:           QuotaDisplayTypeUSD,
 	CustomCurrencySymbol:       "¤",
 	CustomCurrencyExchangeRate: 1.0,
+	RelayLogEnabled:            false,
+	RelayLogRequestBody:        false,
+	RelayLogResponseBody:       true,
+	RelayLogMaxLength:          4096,
 }
 
 func init() {

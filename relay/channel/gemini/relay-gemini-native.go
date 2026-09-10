@@ -25,6 +25,7 @@ func GeminiTextGenerationHandler(c *gin.Context, info *relaycommon.RelayInfo, re
 	if err != nil {
 		return nil, types.NewOpenAIError(err, types.ErrorCodeBadResponseBody, http.StatusInternalServerError)
 	}
+	info.ResponseBody = string(responseBody)
 
 	logger.LogDebug(c, "Gemini native response body: %s", responseBody)
 
@@ -55,6 +56,7 @@ func NativeGeminiEmbeddingHandler(c *gin.Context, resp *http.Response, info *rel
 	if err != nil {
 		return nil, types.NewOpenAIError(err, types.ErrorCodeBadResponseBody, http.StatusInternalServerError)
 	}
+	info.ResponseBody = string(responseBody)
 
 	logger.LogDebug(c, "Gemini native embedding response body: %s", responseBody)
 
