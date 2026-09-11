@@ -87,6 +87,7 @@ import {
 import { USAGE_BILLING_PATH, type LogOtherData } from '../../types'
 import { PluginAuthorLink } from '../plugin-author-link'
 import { DetailRow, DetailSection } from './log-detail-layout'
+import { RelayBodyViewer } from './relay-body-viewer'
 
 // Maps a channel-update changed-field token (as recorded by the backend audit)
 // to its i18n label key for display in the audit details.
@@ -1293,6 +1294,19 @@ export function DetailsDialog(props: DetailsDialogProps) {
               </p>
             </div>
           </div>
+        )}
+        {/* Request parameters */}
+        {props.log.request_body && (
+          <DetailSection label={t('Request Parameters')}>
+            <RelayBodyViewer value={props.log.request_body} />
+          </DetailSection>
+        )}
+
+        {/* Response data */}
+        {props.log.response_body && (
+          <DetailSection label={t('Response Data')}>
+            <RelayBodyViewer value={props.log.response_body} />
+          </DetailSection>
         )}
       </div>
     </Dialog>
